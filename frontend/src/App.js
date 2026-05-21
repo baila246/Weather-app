@@ -31,14 +31,14 @@ function App() {
     try {
 
       // CURRENT WEATHER
-      const res = await axios.get("http://localhost:5000/weather", {
+      const res = await axios.get("https://weather-app-production-5b2e.up.railway.app", {
         params: { city }
       });
 
       setWeather(res.data);
 
       // FORECAST
-      const res2 = await axios.get("http://localhost:5000/forecast", {
+      const res2 = await axios.get("https://weather-app-production-5b2e.up.railway.app", {
         params: { city }
       });
 
