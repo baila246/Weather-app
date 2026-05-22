@@ -1,6 +1,14 @@
 import { WiDaySunny, WiCloud, WiRain, WiThunderstorm } from "react-icons/wi";
 import { useState } from "react";
 import axios from "axios";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer
+} from "recharts";
 import "./App.css";
 
 function App() {
@@ -8,7 +16,11 @@ function App() {
   const [city, setCity] = useState("");
   const [weather, setWeather] = useState(null);
   const [forecast, setForecast] = useState([]);
+  const [chartData, setChartData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [dark, setDark] = useState(true);
+
+  const API = "https://weather-app-production-5b2e.up.railway.app";
 
   const getWeatherIcon = (desc) => {
     if (!desc) return <WiDaySunny />;
@@ -30,37 +42,47 @@ function App() {
 
     try {
 
-      // CURRENT WEATHER
-      const res = await axios.get("https://weather-app-production-5b2e.up.railway.app/weather", {
+      const res = await axios.get(`${API}/weather`, {
+        params: { city }
+      });
+
+      const res2 = await axios.get(`${API}/forecast`, {
         params: { city }
       });
 
       setWeather(res.data);
 
-      // FORECAST
-      const res2 = await axios.get("https://weather-app-production-5b2e.up.railway.app/forecast", {
-        params: { city }
-      });
+      const filtered = res2.data.list.slice(0, 5);
+      setForecast(filtered);
 
-      setForecast(res2.data.list.slice(0, 5));
+      // chart data
+      const chart = res2.data.list.slice(0, 8).map(item => ({
+        time: item.dt_txt.split(" ")[0],
+        temp: item.main.temp
+      }));
+
+      setChartData(chart);
 
     } catch (err) {
-
       alert("Error fetching weather");
-
-    } finally {
-
-      setLoading(false);
-
     }
+
+    setLoading(false);
   };
 
   return (
-    <div className="app">
+    <div className={dark ? "app dark" : "app light"}>
 
       <div className="container">
 
-        <h1 className="title">🌤 Weather Dashboard</h1>
+        {/* HEADER */}
+        <div className="topBar">
+          <h1>Weather Pro</h1>
+
+          <button onClick={() => setDark(!dark)}>
+            {dark ? "Light" : "Dark"}
+          </button>
+        </div>
 
         {/* SEARCH */}
         <div className="searchBox">
@@ -68,7 +90,7 @@ function App() {
           <input
             value={city}
             onChange={(e) => setCity(e.target.value)}
-            placeholder="Enter city (e.g. Lahore)"
+            placeholder="Enter city..."
           />
 
           <button onClick={getWeather}>
@@ -77,7 +99,7 @@ function App() {
 
         </div>
 
-        {loading && <p className="loading">Loading...</p>}
+        {loading && <p>Loading...</p>}
 
         {/* WEATHER CARD */}
         {weather && weather.main && (
@@ -86,37 +108,20 @@ function App() {
 
             <h2>{weather.name}</h2>
 
-            <div style={{ fontSize: "60px" }}>
+            <div className="icon">
               {getWeatherIcon(weather.weather[0].description)}
             </div>
 
-            <h1>{weather.main.temp}°C</h1>
+            <h1>{Math.round(weather.main.temp)}°C</h1>
 
-            <p className="desc">
-              {weather.weather[0].description}
-            </p>
+            <p>{weather.weather[0].description}</p>
 
             <div className="grid">
 
-              <div className="box">
-                <p>Humidity</p>
-                <h3>{weather.main.humidity}%</h3>
-              </div>
-
-              <div className="box">
-                <p>Wind</p>
-                <h3>{weather.wind.speed} m/s</h3>
-              </div>
-
-              <div className="box">
-                <p>Pressure</p>
-                <h3>{weather.main.pressure}</h3>
-              </div>
-
-              <div className="box">
-                <p>Feels Like</p>
-                <h3>{weather.main.feels_like}°C</h3>
-              </div>
+              <div className="box">Humidity {weather.main.humidity}%</div>
+              <div className="box">Wind {weather.wind.speed}</div>
+              <div className="box">Pressure {weather.main.pressure}</div>
+              <div className="box">Feels {weather.main.feels_like}°C</div>
 
             </div>
 
@@ -138,7 +143,7 @@ function App() {
 
                   <p>{item.dt_txt.split(" ")[0]}</p>
 
-                  <h3>{item.main.temp}°C</h3>
+                  <h3>{Math.round(item.main.temp)}°C</h3>
 
                 </div>
 
@@ -149,8 +154,35 @@ function App() {
           </div>
         )}
 
-      </div>
+        {/* CHART */}
+        {chartData.length > 0 && (
 
+          <div className="chartBox">
+
+            <h3>Temperature Trend</h3>
+
+            <ResponsiveContainer width="100%" height={250}>
+
+              <LineChart data={chartData}>
+
+                <XAxis dataKey="time" />
+                <YAxis />
+                <Tooltip />
+
+                <Line
+                  type="monotone"
+                  dataKey="temp"
+                  stroke="#3b82f6"
+                />
+
+              </LineChart>
+
+            </ResponsiveContainer>
+
+          </div>
+        )}
+
+      </div>
     </div>
   );
 }
