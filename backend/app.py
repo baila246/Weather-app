@@ -26,6 +26,12 @@ def weather():
 
     if not city:
         return jsonify({"error": "city parameter is required"}), 400
+
+    url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}&units=metric"
+
+    response = requests.get(url)
+
+    return jsonify(response.json())
 @app.route("/")
 def home():
     return "Weather API is running!"
