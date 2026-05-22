@@ -22,16 +22,16 @@ function App() {
 
   const API = "https://weather-app-production-5b2e.up.railway.app";
   const getBackground = () => {
-    if (!weather) return "default";
-  
+    if (!weather) return "";
+    
     const desc = weather.weather[0].description.toLowerCase();
   
     if (desc.includes("rain")) return "rain";
+    if (desc.includes("thunder")) return "storm";
     if (desc.includes("cloud")) return "cloud";
     if (desc.includes("clear")) return "sun";
-    if (desc.includes("thunder")) return "storm";
   
-    return "default";
+    return "";
   };
 
   const getWeatherIcon = (desc) => {
@@ -83,7 +83,7 @@ function App() {
   };
 
   return (
-    <div className={`app ${dark ? "dark" : getBackground()}`}>
+    <div className={`app ${dark ? "dark" : "light"} ${getBackground()}`}>
 
       <div className="container">
 
