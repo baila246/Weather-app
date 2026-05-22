@@ -12,26 +12,39 @@ API_KEY = "9ac3deca19f586380a4b726d64917ca4"
 
 @app.route("/forecast")
 def forecast():
-    city = request.args.get("city")
+    try:
+        city = request.args.get("city")
 
-    url = f"https://api.openweathermap.org/data/2.5/forecast?q={city}&appid={API_KEY}&units=metric"
+        if not city:
+            return jsonify({"error": "city parameter is required"}), 400
 
-    response = requests.get(url)
+        url = f"https://api.openweathermap.org/data/2.5/forecast?q={city}&appid={API_KEY}&units=metric"
 
-    return jsonify(response.json())
+        response = requests.get(url)
+        data = response.json()
+
+        return jsonify(data)
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @app.route("/weather")
 def weather():
-    city = request.args.get("city")
+    try:
+        city = request.args.get("city")
 
-    if not city:
-        return jsonify({"error": "city parameter is required"}), 400
+        if not city:
+            return jsonify({"error": "city parameter is required"}), 400
 
-    url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}&units=metric"
+        url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}&units=metric"
 
-    response = requests.get(url)
+        response = requests.get(url)
+        data = response.json()
 
-    return jsonify(response.json())
+        return jsonify(data)
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 @app.route("/")
 def home():
     return "Weather API is running!"
