@@ -35,15 +35,15 @@ function App() {
   };
 
   const getWeatherIcon = (desc) => {
-    if (!desc) return <WiDaySunny />;
-
+    if (!desc) return <WiDaySunny className="icon sun" />;
+  
     desc = desc.toLowerCase();
-
-    if (desc.includes("rain")) return <WiRain size={60} />;
-    if (desc.includes("cloud")) return <WiCloud size={60} />;
-    if (desc.includes("thunder")) return <WiThunderstorm size={60} />;
-
-    return <WiDaySunny size={60} />;
+  
+    if (desc.includes("rain")) return <WiRain className="icon rain" size={60} />;
+    if (desc.includes("cloud")) return <WiCloud className="icon cloud" size={60} />;
+    if (desc.includes("thunder")) return <WiThunderstorm className="icon storm" size={60} />;
+  
+    return <WiDaySunny className="icon sun" size={60} />;
   };
 
   const getWeather = async () => {
