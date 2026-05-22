@@ -23,7 +23,7 @@ function App() {
   const API = "https://weather-app-production-5b2e.up.railway.app";
   const getBackground = () => {
     if (!weather) return "";
-    
+  
     const desc = weather.weather[0].description.toLowerCase();
   
     if (desc.includes("rain")) return "rain";
@@ -83,7 +83,7 @@ function App() {
   };
 
   return (
-    <div className={`app ${dark ? "dark" : "light"} ${getBackground()}`}>
+    <div className={`app ${dark ? "dark" : "light"}`} data-weather={weather ? getBackground() : ""}>
 
       <div className="container">
 
