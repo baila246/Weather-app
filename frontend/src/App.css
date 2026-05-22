@@ -79,13 +79,18 @@ body {
   cursor: pointer;
 }
 
-/* CARD */
 .card {
-  background: rgba(255,255,255,0.08);
-  backdrop-filter: blur(16px);
-  padding: 20px;
-  border-radius: 20px;
-  margin-top: 15px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 25px;
+  border-radius: 28px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  transition: 0.4s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
 }
 
 /* ICON */
@@ -145,4 +150,54 @@ body {
   padding: 15px;
   border-radius: 12px;
   background: rgba(255,255,255,0.05);
+}
+/* DEFAULT */
+.default {
+  background: radial-gradient(circle at top, #0f172a, #020617);
+  color: white;
+}
+
+/* SUN */
+.sun {
+  background: linear-gradient(135deg, #fbbf24, #f97316);
+  color: white;
+}
+
+/* CLOUD */
+.cloud {
+  background: linear-gradient(135deg, #64748b, #1e293b);
+  color: white;
+}
+
+/* RAIN */
+.rain {
+  background: linear-gradient(135deg, #0f172a, #334155);
+  color: white;
+}
+
+/* STORM */
+.storm {
+  background: linear-gradient(135deg, #111827, #0f172a);
+  color: white;
+}
+.icon {
+  font-size: 75px;
+  margin: 10px 0;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+  100% { transform: translateY(0px); }
+}
+h1 {
+  font-size: 54px;
+  font-weight: 700;
+  margin: 10px 0;
+}
+
+h2 {
+  font-size: 22px;
+  opacity: 0.9;
 }

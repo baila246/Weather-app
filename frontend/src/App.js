@@ -21,6 +21,18 @@ function App() {
   const [dark, setDark] = useState(true);
 
   const API = "https://weather-app-production-5b2e.up.railway.app";
+  const getBackground = () => {
+    if (!weather) return "default";
+  
+    const desc = weather.weather[0].description.toLowerCase();
+  
+    if (desc.includes("rain")) return "rain";
+    if (desc.includes("cloud")) return "cloud";
+    if (desc.includes("clear")) return "sun";
+    if (desc.includes("thunder")) return "storm";
+  
+    return "default";
+  };
 
   const getWeatherIcon = (desc) => {
     if (!desc) return <WiDaySunny />;
@@ -71,7 +83,7 @@ function App() {
   };
 
   return (
-    <div className={dark ? "app dark" : "app light"}>
+    <div className={`app ${dark ? "dark" : getBackground()}`}>
 
       <div className="container">
 
